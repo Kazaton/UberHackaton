@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 
-<<<<<<< HEAD
-void main() => runApp(const MyApp());
-=======
 void main() {
   runApp(const MyApp());
 }
->>>>>>> 338ca320a2b31a33ad95ce4e4bf61b318773ac5c
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -19,15 +15,6 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         // This is the theme of your application.
         //
-<<<<<<< HEAD
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or press Run > Flutter Hot Reload in a Flutter IDE). Notice that the
-        // counter didn't reset back to zero; the application is not restarted.
-        primarySwatch: Colors.blue,
-=======
         // TRY THIS: Try running your application with "flutter run". You'll see
         // the application has a blue toolbar. Then, without quitting the app,
         // try changing the seedColor in the colorScheme below to Colors.green
@@ -43,7 +30,6 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
->>>>>>> 338ca320a2b31a33ad95ce4e4bf61b318773ac5c
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
@@ -92,13 +78,10 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-<<<<<<< HEAD
-=======
         // TRY THIS: Try changing the color here to a specific color (to
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
         // change color while the other colors stay the same.
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
->>>>>>> 338ca320a2b31a33ad95ce4e4bf61b318773ac5c
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
@@ -111,26 +94,15 @@ class _MyHomePageState extends State<MyHomePage> {
           // arranges them vertically. By default, it sizes itself to fit its
           // children horizontally, and tries to be as tall as its parent.
           //
-<<<<<<< HEAD
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-=======
->>>>>>> 338ca320a2b31a33ad95ce4e4bf61b318773ac5c
           // Column has various properties to control how it sizes itself and
           // how it positions its children. Here we use mainAxisAlignment to
           // center the children vertically; the main axis here is the vertical
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
-<<<<<<< HEAD
-=======
           //
           // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
           // action in the IDE, or press "p" in the console), to see the
           // wireframe for each widget.
->>>>>>> 338ca320a2b31a33ad95ce4e4bf61b318773ac5c
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(

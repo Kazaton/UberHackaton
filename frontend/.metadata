@@ -7,9 +7,6 @@ version:
   revision: "efbf63d9c66b9f6ec30e9ad4611189aa80003d31"
   channel: "stable"
 
-<<<<<<< HEAD
-project_type: module
-=======
 project_type: app
 
 # Tracks metadata for the flutter migrate command
@@ -46,4 +43,3 @@ migration:
   unmanaged_files:
     - 'lib/main.dart'
     - 'ios/Runner.xcodeproj/project.pbxproj'
->>>>>>> 338ca320a2b31a33ad95ce4e4bf61b318773ac5c
