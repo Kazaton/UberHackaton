@@ -53,4 +53,4 @@ db.sqlite3-journal
 
 # Environment files
 .env
-.venv/
+.venv/67-=
