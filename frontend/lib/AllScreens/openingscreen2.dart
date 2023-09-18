@@ -136,8 +136,8 @@ class Contains extends StatelessWidget {
                                       height: 12.11,
                                       decoration: BoxDecoration(
                                         image: DecorationImage(
-                                          image:
-                                              AssetImage("assets/safety.png"),
+                                          image: AssetImage(
+                                              "assets/safety.png"), //не работает
                                           fit: BoxFit.fill,
                                         ),
                                       ),
@@ -151,8 +151,8 @@ class Contains extends StatelessWidget {
                                       height: 11.78,
                                       decoration: BoxDecoration(
                                         image: DecorationImage(
-                                          image:
-                                              AssetImage("assets/safety.png"),
+                                          image: AssetImage(
+                                              "assets/safety.png"), //не работает
                                           fit: BoxFit.fill,
                                         ),
                                       ),
