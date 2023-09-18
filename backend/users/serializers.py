@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import User
 from django.utils.translation import gettext_lazy as _
+from rest_framework_simplejwt.tokens import RefreshToken
 
 class CustomTokenObtainPairSerializer(serializers.Serializer):
     phone = serializers.CharField(required=True)
@@ -26,6 +27,10 @@ class CustomTokenObtainPairSerializer(serializers.Serializer):
             }
 
         raise serializers.ValidationError('No active account found with the given credentials')
+    
+    def set_token(self, user):
+        refresh = RefreshToken.for_user(user)
+        return refresh
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
@@ -45,7 +50,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'phone', 'password', 'confirm_password', 'is_disabled', 'age', 'first_name', 'last_name']
+        fields = ['id', 'phone', 'password', 'confirm_password', 'is_disabled', 'first_name', 'last_name']
 
     def validate(self, attrs):
         if attrs['password'] != attrs['confirm_password']:

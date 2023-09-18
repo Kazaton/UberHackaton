@@ -33,7 +33,6 @@ class UserManager(BaseUserManager):
 class User(AbstractUser):
     phone = models.CharField(unique=True, max_length=30)
     is_disabled = models.BooleanField(default=False)
-    age = models.PositiveIntegerField(default = 1)
     username = None
     USERNAME_FIELD = 'phone'
     REQUIRED_FIELDS = []
