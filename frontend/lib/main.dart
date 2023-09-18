@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/AllScreens/mainscreen.dart';
+import 'package:frontend/AllScreens/mobilescreen.dart';
 import 'package:frontend/AllScreens/openingscreen.dart';
 import 'package:frontend/AllScreens/openingscreen2.dart';
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Opening2(), //менять скрины через это
+      home: MobScreen(), //менять скрины через это
       debugShowCheckedModeBanner: false,
     );
   }
