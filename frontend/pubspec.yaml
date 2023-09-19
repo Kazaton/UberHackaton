@@ -73,6 +73,8 @@ flutter:
     - assets/8.png
     - assets/9.png
     - assets/10.png
+    - assets/underline.png
+    - assets/long_underline.png
   fonts:
     - family: Roboto,
       fonts:
