@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
               return const HomePage();
             } else {
               return Builder(
-                builder: (context) => const RegistrationScreen(),
+                builder: (context) => const HomePage(),
               );
             }
           }
