@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Kazaton',
       theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color(0xFF1A1A1A),
+        scaffoldBackgroundColor: const Color(0xFF021213),
         colorScheme: const ColorScheme.dark(
           brightness: Brightness.dark, 
           onPrimaryContainer: Color(0xFFEDF6FF),
@@ -31,10 +31,10 @@ class MyApp extends StatelessWidget {
           onSecondaryContainer: Color(0xFF021213),
           error: Color(0xffcf6679), 
           onError: Color(0xFF021213), 
-          background: Color(0xFF020202), 
+          background: Color(0xFF021213), 
           onBackground: Color(0xFFEDF6FF), 
           surface: Color(0xFFDADADA), 
-          onSurface: Color(0xFF020202), 
+          onSurface: Color(0xFF021213), 
         ),
         inputDecorationTheme: const InputDecorationTheme(
           fillColor: Color(0xFF1A1A1A),
@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
             return const CircularProgressIndicator();
           } else {
             if (snapshot.hasData && snapshot.data == true) {
-              return const HomePage();
+              return const RegistrationScreen();
             } else {
               return Builder(
                 builder: (context) => const HomePage(),
