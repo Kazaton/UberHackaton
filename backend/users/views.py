@@ -140,10 +140,10 @@ class GetUsersBus(APIView):
             # Getting user's info
             user = request.user
             # Getting bus via user's registration
-            registration = UserRegistration.objects.filter(user=user).first()
-            bus = registration.objects.bus
-            if bus:  # If exists
+            registration = UserRegistration.objects.filter(user=user.id).first()
+            if registration:  # If exists
                 # Get bus info
+                bus = registration.bus
                 data = BusSerializer(bus).data
                 return Response(status=status.HTTP_200_OK, data=data)
             else:  # If doesn't we inform that user has no registration
