@@ -63,3 +63,12 @@ class Bus(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+class UserRegistration(models.Model):
+    # Linking user and bus within model
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    bus = models.ForeignKey(Bus, on_delete=models.CASCADE)
+    is_disabled = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.bus.name}"
