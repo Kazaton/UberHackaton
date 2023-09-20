@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/urls.dart';
+import 'package:frontend/context/token_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:frontend/components/registration_buttons.dart';
 import 'package:frontend/screens/user_type/disabled.dart';
@@ -92,30 +93,56 @@ class _InteractiveMapState extends State<InteractiveMap> {
 
   Future<void> registerForBus(int busId) async {
     final url = Uri.parse('$busRegisterRef$busId/');
-    final response = await http.post(url);
+    final tokenService = TokenService();
+    final accessToken = await tokenService.getAccessToken();
+    if (accessToken == null) {
+      throw 'Access token is not available';
+    }
+    final headers = {
+      'Authorization': 'Bearer $accessToken',
+    };
+    final response = await http.post(url, headers: headers);
     if (response.statusCode == 200) {
       return;
     } else {
-      throw Exception('Error: ${response.statusCode}');
+      throw 'Error: ${response.statusCode}';
     }
   }
 
   Future<void> exitFromBus(int busId) async {
     final url = Uri.parse('$busExitRef$busId/');
-    final response = await http.post(url);
+    final tokenService = TokenService();
+    final accessToken = await tokenService.getAccessToken();
+    if (accessToken == null) {
+      throw 'Access token is not available';
+    }
+    final headers = {
+      'Authorization': 'Bearer $accessToken',
+    };
+    final response = await http.post(url, headers: headers);
     if (response.statusCode == 200) {
       return;
     } else {
-      return;
+      throw 'Error: ${response.statusCode}';
     }
   }
 
   Future<int> getUsersBus() async {
     try {
       final url = Uri.parse(getUsersBusRef);
-      final response = await http.get(url);
+      final tokenService = TokenService();
+      final accessToken = await tokenService.getAccessToken();
+      if (accessToken == null) {
+      throw 'Access token is not available';
+      }
+      final headers = {
+        'Authorization': 'Bearer $accessToken',
+      };
+      final response = await http.get(url, headers: headers);
       if (response.statusCode == 200) {
-        return json.decode(response.body);
+        var data = json.decode(response.body);
+        int id = data["id"] as int;
+        return id;
       } else {
         throw Exception('Error');
       }
@@ -194,9 +221,9 @@ class _InteractiveMapState extends State<InteractiveMap> {
                   MaterialPageRoute(builder: (context) => const PersonScreen()),
                 );
               },
-              onExitPressed: () {
-                exitFromBus(getUsersBus()
-                    as int); // Trying to find user's current bus and leave it
+              onExitPressed: () async {
+                int busId = await getUsersBus();
+                exitFromBus(busId); // Trying to find user's current bus and leave it
                 setState(() {
                   isRegistered = false;
                 });
