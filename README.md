@@ -36,15 +36,18 @@ In today's fast-paced world, it's essential to use your time efficiently and be 
 ### Explanation of Frontend and Backend
 **Frontend**: Our frontend is built using Flutter and Dart programming language. The application consists of several screen types based on their function.
 
-1. **Opening Screens**: 
-   - `openingscreen1`: Displayed when the app isn't ready to start.
-   - `openingscreen2`: Shown once all resources are processed, displaying the Uber logo, slogan "Move with safety," and a "Get Started" button.
-
-2. **Authorization Screens**:
+1. **Authorization Screens**:
    - `login_block`: Allows existing users to log in.
    - `registration_block`: For new users to register. Collects user information and handles errors.
 
-3. **Main Functionality Screens**: These screens provide access to the app's core features, including bus routes, real-time maps, passenger counts, and special needs options.
+2. **Main Functionality Screens**: These screens provide access to the app's core features, including bus routes, real-time maps, passenger counts, and special needs options.
+
+**Backend**: Our backend is build on the Python's framework - Django
+
+1. We use `djangorestframework` to control requests in our system. It also makes easier to create stable server API.
+2. To provide security we use  `simple-jwt tokens`. Those tokens keep users signup in the app, keeping their data encrypted. Also they update every 5 minutes, which makes this type of security even stronger
+3. To connect with frontend we send our data via `serializers`, whick converts python data to JSON.
+4. To save the data about users and buses we used `sqlite3 database`, which is a basis of django. We created models of Bus, BusType and User and stored the info using the typification of these models.
 
 ### Results and Projection of App Usage
 The application is expected to significantly improve the efficiency and convenience of using public buses. Users will be able to make informed decisions about their bus routes, access real-time information on bus locations, and benefit from an innovative payment system. Passengers with special needs will have their rights protected, and other passengers will be encouraged to offer them seats. Overall, the "Universal Bus Solution" aims to enhance the bus travel experience for all passengers while promoting a more eco-friendly mode of transportation.
