@@ -116,7 +116,7 @@ class _NamesState extends State<Names> {
             )),
         Padding(
           padding: const EdgeInsets.only(left: 30, top: 5.0),
-          child: Image.asset('assets/underline.png'),
+          child: Image.asset('assets/long_underline.png'),
         ),
         Padding(
             padding: const EdgeInsets.only(left: 30.0, top: 50.0),
@@ -202,9 +202,7 @@ class _NamesState extends State<Names> {
         Padding(
             padding: const EdgeInsets.all(30.0),
             child: ElevatedButton(
-                onPressed: () {
-                  // Ваш код здесь
-                },
+                onPressed: () {},
                 style: ElevatedButton.styleFrom(
                     primary: Color(0xFF535AFF),
                     shadowColor: Color(0x3F000000),
