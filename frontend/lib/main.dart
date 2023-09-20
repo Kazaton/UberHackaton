@@ -18,23 +18,23 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: const Color(0xFF021213),
         colorScheme: const ColorScheme.dark(
-          brightness: Brightness.dark, 
+          brightness: Brightness.dark,
           onPrimaryContainer: Color(0xFFEDF6FF),
-          primary: Color(0xffbb86fc), 
-          onPrimary: Color(0xFF021213), 
+          primary: Color(0xffbb86fc),
+          onPrimary: Color(0xFF021213),
           tertiaryContainer: Color(0xFF021213),
           secondaryContainer: Color(0xFF021213),
-          primaryContainer: Color(0xFF021213), 
-          secondary: Color(0xff535AFF), 
-          onSecondary: Color(0xFFEDF6FF), 
+          primaryContainer: Color(0xFF021213),
+          secondary: Color(0xff535AFF),
+          onSecondary: Color(0xFFEDF6FF),
           onTertiaryContainer: Color(0xFF021213),
           onSecondaryContainer: Color(0xFF021213),
-          error: Color(0xffcf6679), 
-          onError: Color(0xFF021213), 
-          background: Color(0xFF021213), 
-          onBackground: Color(0xFFEDF6FF), 
-          surface: Color(0xFFDADADA), 
-          onSurface: Color(0xFF021213), 
+          error: Color(0xffcf6679),
+          onError: Color(0xFF021213),
+          background: Color(0xFF021213),
+          onBackground: Color(0xFFEDF6FF),
+          surface: Color(0xFFDADADA),
+          onSurface: Color(0xFF021213),
         ),
         inputDecorationTheme: const InputDecorationTheme(
           fillColor: Color(0xFF1A1A1A),
@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
               return const RegistrationScreen();
             } else {
               return Builder(
-                builder: (context) => const HomePage(),
+                builder: (context) => const RegistrationScreen(),
               );
             }
           }
