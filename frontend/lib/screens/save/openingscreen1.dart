@@ -2,16 +2,14 @@
 
 import 'package:flutter/material.dart';
 
-class Background extends StatefulWidget {
+class OpeningScreen extends StatefulWidget {
   @override
-  _BackgroundState createState() => _BackgroundState();
+  _OpeningState createState() => _OpeningState();
 }
 
-class _BackgroundState extends State<Background> {
+class _OpeningState extends State<OpeningScreen> {
   @override
   Widget build(BuildContext context) {
-    // Figma Flutter Generator Rectangle2Widget - RECTANGLE
-
     return Container(
       width: 414,
       height: 896,
@@ -26,7 +24,6 @@ class _BackgroundState extends State<Background> {
 class Icon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Figma Flutter Generator Group48Widget - GROUP
     return Container(
         width: 181,
         height: 181,
@@ -56,18 +53,18 @@ class Icon extends StatelessWidget {
           Positioned(
               top: 42,
               left: 14,
-              child: Text(
-                'Uber',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    color: Color.fromRGBO(236, 246, 255, 1),
-                    fontFamily: 'Roboto',
-                    fontSize: 64,
-                    letterSpacing:
-                        0 /*percentages not used in flutter. defaulting to zero*/,
-                    fontWeight: FontWeight.normal,
-                    height: 1),
-              )),
+              child: SizedBox(
+                width: 154,
+                height: 96,
+                child: Text('Uber',
+                    style: TextStyle(
+                      color: Color(0xFFECF6FF),
+                      fontSize: 64,
+                      fontFamily: 'Roboto',
+                      fontWeight: FontWeight.w600,
+                      height: 0,
+                    )),
+              ))
         ]));
   }
 }

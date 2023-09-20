@@ -8,12 +8,10 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
-      child: InteractiveMap()
-    );
+    return const SafeArea(child: InteractiveMap());
   }
-
 }
+
 class BusType {
   final int id;
   final String name;
@@ -63,19 +61,18 @@ class Bus {
   }
 }
 
-
 class InteractiveMap extends StatefulWidget {
   const InteractiveMap({super.key});
 
   @override
-  State <InteractiveMap> createState() => _InteractiveMapState();
+  State<InteractiveMap> createState() => _InteractiveMapState();
 }
 
 class _InteractiveMapState extends State<InteractiveMap> {
-
   Future<List<Bus>> getBusList() async {
     try {
       final response = await http.get(Uri.parse(busListRef));
+
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         final List<Bus> buses = data.map((entry) {
@@ -99,7 +96,8 @@ class _InteractiveMapState extends State<InteractiveMap> {
     getBusList().then((busList) {
       setState(() {
         buses = busList;
-        showRoutes = List.generate(buses.length, (index) => false); // Инициализация showRoutes
+        showRoutes = List.generate(
+            buses.length, (index) => false); // Инициализация showRoutes
       });
     });
   }
@@ -146,10 +144,11 @@ class _InteractiveMapState extends State<InteractiveMap> {
             itemCount: buses.length,
             itemBuilder: (context, index) => Padding(
               padding: const EdgeInsets.all(4.0),
-              child:  ElevatedButton(
+              child: ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    showRoutes[buses[index].id - 1] = !showRoutes[buses[index].id - 1];
+                    showRoutes[buses[index].id - 1] =
+                        !showRoutes[buses[index].id - 1];
                   });
                 },
                 child: Row(
@@ -168,4 +167,3 @@ class _InteractiveMapState extends State<InteractiveMap> {
     );
   }
 }
-
