@@ -12,6 +12,55 @@ class HomePage extends StatelessWidget {
   }
 }
 
+class BusType {
+  final int id;
+  final String name;
+  final int numberOfPeople;
+  final int numberOfSpecialSeats;
+
+  BusType({
+    required this.id,
+    required this.name,
+    required this.numberOfPeople,
+    required this.numberOfSpecialSeats,
+  });
+
+  factory BusType.fromJson(Map<String, dynamic> json) {
+    return BusType(
+      id: json['id'],
+      name: json['name'],
+      numberOfPeople: json['number_of_people'],
+      numberOfSpecialSeats: json['number_of_special_seats'],
+    );
+  }
+}
+
+class Bus {
+  final int id;
+  final String name;
+  final int numberOfPeople;
+  final int numberOfSpecialSeats;
+  final BusType busType;
+
+  Bus({
+    required this.id,
+    required this.name,
+    required this.numberOfPeople,
+    required this.numberOfSpecialSeats,
+    required this.busType,
+  });
+
+  factory Bus.fromJson(Map<String, dynamic> json) {
+    return Bus(
+      id: json['id'],
+      name: json['name'],
+      numberOfPeople: json['number_of_people'],
+      numberOfSpecialSeats: json['number_of_special_seats'],
+      busType: BusType.fromJson(json['bus_type']),
+    );
+  }
+}
+
 class InteractiveMap extends StatefulWidget {
   const InteractiveMap({super.key});
 
@@ -20,21 +69,37 @@ class InteractiveMap extends StatefulWidget {
 }
 
 class _InteractiveMapState extends State<InteractiveMap> {
-  List<bool> showRoutes = List.generate(10, (index) => false);
-
-  Future<String> _getBusName(int index) async {
+  Future<List<Bus>> getBusList() async {
     try {
-      final response = await http.get(Uri.parse(busRef + index.toString()));
+      final response = await http.get(Uri.parse(busListRef));
+
       if (response.statusCode == 200) {
-        // If request is ok, return bus' data
-        final Map<String, dynamic> data = json.decode(response.body);
-        return data['name'];
+        final List<dynamic> data = json.decode(response.body);
+        final List<Bus> buses = data.map((entry) {
+          return Bus.fromJson(entry);
+        }).toList();
+        return buses;
       } else {
         throw Exception('Error: ${response.statusCode}');
       }
     } catch (error) {
       throw Exception('Error: $error');
     }
+  }
+
+  List<bool> showRoutes = [];
+  List<Bus> buses = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getBusList().then((busList) {
+      setState(() {
+        buses = busList;
+        showRoutes = List.generate(
+            buses.length, (index) => false); // Инициализация showRoutes
+      });
+    });
   }
 
   @override
@@ -59,10 +124,10 @@ class _InteractiveMapState extends State<InteractiveMap> {
                     height: 3080,
                     fit: BoxFit.fill,
                   ),
-                  for (int i = 0; i < 10; i++)
-                    if (showRoutes[i]) // If route chosen, show it
+                  for (final bus in buses)
+                    if (showRoutes[bus.id - 1]) // If route chosen, show it
                       Image.asset(
-                        'assets/${i + 1}.png', // Print routes
+                        'assets/${bus.id}.png', // Print routes
                         width: 2414,
                         height: 3080,
                         fit: BoxFit.fill,
@@ -76,30 +141,26 @@ class _InteractiveMapState extends State<InteractiveMap> {
           height: 60,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: 10,
+            itemCount: buses.length,
             itemBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: FutureBuilder<String>(
-                  future: _getBusName(index),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else if (snapshot.hasData) {
-                      return ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            showRoutes[index] = !showRoutes[index];
-                          });
-                        },
-                        child: Text(snapshot.data ?? 'Name not found'),
-                      );
-                    } else {
-                      return Text('Name not found');
-                    }
-                  },
-                )),
+              padding: const EdgeInsets.all(4.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    showRoutes[buses[index].id - 1] =
+                        !showRoutes[buses[index].id - 1];
+                  });
+                },
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.directions_bus,
+                    ),
+                    Text(buses[index].name),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       ],
