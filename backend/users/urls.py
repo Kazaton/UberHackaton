@@ -1,6 +1,6 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
-from .views import CustomUserCreateView, CustomTokenObtainPairView, CustomUserCreateView, UserRetrieveUpdateAPIView, GetBusView
+from .views import CustomUserCreateView, CustomTokenObtainPairView, CustomUserCreateView, UserRetrieveUpdateAPIView, GetBusView, GetBusListView
 
 # URLs for the backend API
 urlpatterns = [
@@ -10,4 +10,5 @@ urlpatterns = [
     path('retrieve_user/', UserRetrieveUpdateAPIView.as_view(), name='retrieve_user'),
     path('update_user/', UserRetrieveUpdateAPIView.as_view(), name='update_user'),
     path('bus/get/<int:bus_id>/', GetBusView.as_view(), name='get-bus'),
+    path('bus/get/list/', GetBusListView.as_view(), name='get-bus-list'),
 ]

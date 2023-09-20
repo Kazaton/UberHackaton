@@ -44,3 +44,17 @@ class GetBusView(APIView):
         except:
             # Error message if the bus_id is wrong
             return Response(status=status.HTTP_400_BAD_REQUEST, data={"message": "No such bus id"})
+
+class GetBusListView(APIView):
+    def get(self, request):
+        try:
+            # Getting list of all buses
+            buses = Bus.objects.all() 
+            data = []
+            for bus in buses:
+                bus_data = BusSerializer(bus).data
+                data.append(bus_data)
+            return Response(data=data, status=status.HTTP_200_OK)
+        except:
+            # Error message if there is no buses
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={"message": "No buses registered yet"})
