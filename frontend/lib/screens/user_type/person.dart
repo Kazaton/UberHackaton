@@ -18,15 +18,19 @@ class PersonScreen extends StatelessWidget {
 }
 
 class Contains extends StatelessWidget {
+  const Contains({super.key});
+
   @override
   Widget build(BuildContext context) {
+
+    double screenHeight = MediaQuery.of(context).size.height;
     return Container(
         height: MediaQuery.of(context).size.height,
         color: const Color(0xFF282F74),
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 250.0),
+              padding: EdgeInsets.only(top: screenHeight * 0.45),
               child: Text(
                 'The evidence of possessing the ticket',
                 textAlign: TextAlign.center,
@@ -41,11 +45,10 @@ class Contains extends StatelessWidget {
             ),
             Center(
               child: Padding(
-                padding: const EdgeInsets.only(top: 270.0),
+                padding: const EdgeInsets.only(top: 30.0),
                 child: ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                        primary: Color(0xFF535AFF),
                         shadowColor: Color(0xFF191919),
                         elevation: 4,
                         minimumSize: Size(341, 58)),

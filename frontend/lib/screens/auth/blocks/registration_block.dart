@@ -99,16 +99,15 @@ class _RegistrationBlockState extends State<RegistrationBlock> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Container(
+    return SingleChildScrollView(
+      child: Container(
         //container for the whole screen
-        height: MediaQuery.of(context).size.height,
         color: const Color(0xFF191919),
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
+            SizedBox(
                 child: Text('Registration',
                     style: TextStyle(
                       color: Color(0xFFECF6FF),
@@ -230,12 +229,11 @@ class _RegistrationBlockState extends State<RegistrationBlock> {
             ),
             Center(
               child: Padding(
-                padding: const EdgeInsets.only(top: 100.0),
+                padding: const EdgeInsets.only(top: 30.0),
                 child: ElevatedButton(
                     //creating a button
                     onPressed: _register, //if button is pressed
                     style: ElevatedButton.styleFrom(
-                        primary: Color(0xFF535AFF),
                         shadowColor: Color(0xFF191919),
                         elevation: 4,
                         minimumSize: Size(341, 58)),
@@ -251,10 +249,9 @@ class _RegistrationBlockState extends State<RegistrationBlock> {
                     )),
               ),
             ),
-            Center(child: const SizedBox(height: 16)),
           ],
         ),
       ),
-    ]);
+    );
   }
 }

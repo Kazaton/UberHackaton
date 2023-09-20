@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Bus, BusType
+from .models import User, Bus, BusType, UserRegistration
 from django.utils.translation import gettext_lazy as _
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -78,3 +78,11 @@ class BusSerializer(serializers.ModelSerializer):
         fields = ('id','name','number_of_people','number_of_special_seats', 'bus_type')
 
         depth = 1 # add bus_type's data to the response too
+
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+    class Meta:
+        model = UserRegistration
+        fields = ('id', 'user', 'bus', 'is_disabled')
+
+        depth = 2 # add info about user and bus too

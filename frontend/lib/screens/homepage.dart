@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/urls.dart';
 import 'package:http/http.dart' as http;
+import 'package:frontend/components/registration_buttons.dart';
+import 'package:frontend/screens/user_type/disabled.dart';
+import 'package:frontend/screens/user_type/person.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -87,6 +90,40 @@ class _InteractiveMapState extends State<InteractiveMap> {
     }
   }
 
+  Future<void> registerForBus(int busId) async {
+    final url = Uri.parse('$busRegisterRef$busId/');
+    final response = await http.post(url);
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      throw Exception('Error: ${response.statusCode}');
+    }
+  }
+
+  Future<void> exitFromBus(int busId) async {
+    final url = Uri.parse('$busExitRef$busId/');
+    final response = await http.post(url);
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      return;
+    }
+  }
+
+  Future<int> getUsersBus() async {
+    try {
+      final url = Uri.parse(getUsersBusRef);
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception('Error');
+      }
+    } catch (error) {
+      throw Exception('Error: $error');
+    }
+  }
+
   List<bool> showRoutes = [];
   List<Bus> buses = [];
 
@@ -101,6 +138,8 @@ class _InteractiveMapState extends State<InteractiveMap> {
       });
     });
   }
+
+  bool isRegistered = false;
 
   @override
   Widget build(BuildContext context) {
@@ -139,6 +178,32 @@ class _InteractiveMapState extends State<InteractiveMap> {
         ),
         SizedBox(
           height: 60,
+          child: RegistrationButtons(
+              isRegistered: isRegistered,
+              onRegisterPressed: () {
+                // Registration on the route
+                registerForBus(showRoutes.indexOf(true) +
+                    1); // Trying to find active bus and register to it
+                setState(() {
+                  isRegistered = true;
+                });
+              },
+              onShowTicketPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const PersonScreen()),
+                );
+              },
+              onExitPressed: () {
+                exitFromBus(getUsersBus()
+                    as int); // Trying to find user's current bus and leave it
+                setState(() {
+                  isRegistered = false;
+                });
+              }),
+        ),
+        SizedBox(
+          height: 60,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: buses.length,
@@ -147,8 +212,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
               child: ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    showRoutes[buses[index].id - 1] =
-                        !showRoutes[buses[index].id - 1];
+                    showRoutes = List.generate(buses.length, (i) => i == index);
                   });
                 },
                 child: Row(

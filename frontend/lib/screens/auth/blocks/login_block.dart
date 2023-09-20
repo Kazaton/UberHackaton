@@ -88,17 +88,14 @@ class _LoginBlockState extends State<LoginBlock> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Container(
-        height: MediaQuery.of(context)
-            .size
-            .height, //making a container for the whole screen with special parameters
+    return SingleChildScrollView(
+      child: Container(
         color: const Color(0xFF191919),
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
+            SizedBox(
                 child: Text('Log in',
                     style: TextStyle(
                       color: Color(0xFFECF6FF),
@@ -163,33 +160,30 @@ class _LoginBlockState extends State<LoginBlock> {
                 ),
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 40),
             Center(
-                child: Padding(
-              padding: const EdgeInsets.only(top: 350.0),
               child: ElevatedButton(
-                  //creating button
-                  onPressed: _login, //if button is pressed
-                  style: ElevatedButton.styleFrom(
-                      primary: Color(0xFF535AFF),
-                      shadowColor: Color(0x3F000000),
-                      elevation: 4,
-                      minimumSize: Size(341, 58)),
-                  child: Text(
-                    'Log in', //text inside the button
-                    style: TextStyle(
-                      color: Color(0xFFECF6FF),
-                      fontSize: 21.60,
-                      fontFamily: 'Roboto',
-                      fontWeight: FontWeight.w700,
-                      height: 0,
-                    ),
-                  )),
-            )),
-            const SizedBox(height: 16),
+                onPressed: _login,
+                style: ElevatedButton.styleFrom(
+                  shadowColor: Color(0x3F000000),
+                  elevation: 4,
+                  minimumSize: Size(340, 60),
+                ),
+                child: Text(
+                  'Log in',
+                  style: TextStyle(
+                    color: Color(0xFFECF6FF),
+                    fontSize: 21.60,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w700,
+                    height: 0,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
-    ]);
+    );
   }
 }
