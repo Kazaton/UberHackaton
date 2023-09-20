@@ -2,29 +2,28 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/urls.dart';
 import 'package:http/http.dart' as http;
+
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
-      child: InteractiveMap()
-    );
+    return const SafeArea(child: InteractiveMap());
   }
-
 }
+
 class InteractiveMap extends StatefulWidget {
   const InteractiveMap({super.key});
 
   @override
-  State <InteractiveMap> createState() => _InteractiveMapState();
+  State<InteractiveMap> createState() => _InteractiveMapState();
 }
 
 class _InteractiveMapState extends State<InteractiveMap> {
   List<bool> showRoutes = List.generate(10, (index) => false);
 
   Future<String> _getBusName(int index) async {
-    try{
+    try {
       final response = await http.get(Uri.parse(busRef + index.toString()));
       if (response.statusCode == 200) {
         // If request is ok, return bus' data
@@ -79,8 +78,8 @@ class _InteractiveMapState extends State<InteractiveMap> {
             scrollDirection: Axis.horizontal,
             itemCount: 10,
             itemBuilder: (context, index) => Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: FutureBuilder<String>(
+                padding: const EdgeInsets.all(4.0),
+                child: FutureBuilder<String>(
                   future: _getBusName(index),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -100,13 +99,10 @@ class _InteractiveMapState extends State<InteractiveMap> {
                       return Text('Name not found');
                     }
                   },
-                )
-              ),
-            ),
+                )),
           ),
-        
+        ),
       ],
     );
   }
 }
-

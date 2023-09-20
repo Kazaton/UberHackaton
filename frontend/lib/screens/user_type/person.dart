@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 
-class DisabledScreen extends StatelessWidget {
-  const DisabledScreen({super.key});
+class PersonScreen extends StatelessWidget {
+  const PersonScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +22,13 @@ class Contains extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         height: MediaQuery.of(context).size.height,
-        color: const Color(0xFF9C7C1D),
+        color: const Color(0xFF282F74),
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 250.0),
               child: Text(
-                'I am disabled, please provide me with a special seat',
+                'The evidence of possessing the ticket',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
@@ -41,7 +41,7 @@ class Contains extends StatelessWidget {
             ),
             Center(
               child: Padding(
-                padding: const EdgeInsets.only(top: 200.0),
+                padding: const EdgeInsets.only(top: 270.0),
                 child: ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(

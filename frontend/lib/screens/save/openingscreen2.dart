@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class Opening2 extends StatelessWidget {
-  const Opening2({super.key});
+class OpeningScreen2 extends StatelessWidget {
+  const OpeningScreen2({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -210,16 +210,14 @@ class Contains extends StatelessWidget {
                         child: SizedBox(
                           width: 154,
                           height: 96,
-                          child: Text(
-                            'Uber',
-                            style: TextStyle(
-                              color: Color(0xFFECF6FF),
-                              fontSize: 64,
-                              fontFamily: 'Open Sans',
-                              fontWeight: FontWeight.w600,
-                              height: 0,
-                            ),
-                          ),
+                          child: Text('Uber',
+                              style: TextStyle(
+                                color: Color(0xFFECF6FF),
+                                fontSize: 64,
+                                fontFamily: 'Roboto',
+                                fontWeight: FontWeight.w600,
+                                height: 0,
+                              )),
                         ),
                       ),
                     ],

@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/auth/auth_screen.dart';
+import 'package:frontend/screens/auth/login_screen.dart';
 import 'package:frontend/screens/homepage.dart';
 import 'package:frontend/context/token_service.dart';
+import 'package:frontend/screens/user_type/disabled.dart';
+import 'package:frontend/screens/user_type/person.dart';
+import 'package:frontend/screens/save/openingscreen1.dart';
+import 'package:frontend/screens/save/openingscreen2.dart';
 
 void main() {
   runApp(MyApp());
@@ -50,7 +55,7 @@ class MyApp extends StatelessWidget {
               return const RegistrationScreen();
             } else {
               return Builder(
-                builder: (context) => const RegistrationScreen(),
+                builder: (context) => HomePage(),
               );
             }
           }
