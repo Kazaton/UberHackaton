@@ -18,13 +18,15 @@ class RegistrationBlock extends StatefulWidget {
 }
 
 class _RegistrationBlockState extends State<RegistrationBlock> {
-  final TextEditingController _phoneController = TextEditingController();
-  bool _isDisabledValue = false;
+  final TextEditingController _phoneController =
+      TextEditingController(); //phone input
+  bool _isDisabledValue = false; //checking for disability
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _lastNameController =
+      TextEditingController(); //all above is input
 
   Future<void> _register() async {
     final response = await http.post(
@@ -97,28 +99,42 @@ class _RegistrationBlockState extends State<RegistrationBlock> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Container(
-        height: MediaQuery.of(context).size.height,
-        color: const Color(0xFF021213),
+    return SingleChildScrollView(
+      child: Container(
+        //container for the whole screen
+        color: const Color(0xFF191919),
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('What’s your name?',
-                style: TextStyle(
-                  color: Color(0xFFECF6FF),
-                  fontSize: 20,
-                  fontFamily: 'Roboto',
-                  fontWeight: FontWeight.w500,
-                  height: 0,
-                )),
+            SizedBox(
+                child: Text('Registration',
+                    style: TextStyle(
+                      color: Color(0xFFECF6FF),
+                      fontSize: 24,
+                      fontFamily: 'Roboto',
+                      fontWeight: FontWeight.w500,
+                      height: 0,
+                    ))),
+            Padding(
+              padding: const EdgeInsets.only(top: 30.0),
+              child: Text('What’s your name?',
+                  style: TextStyle(
+                    color: Color(0xFFECF6FF),
+                    fontSize: 20,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w500,
+                    height: 0,
+                  )),
+            ),
             Row(children: [
+              //row of texts so they go after each other to the right
               Expanded(
                   child: TextField(
                       controller: _firstNameController,
                       decoration:
                           const InputDecoration(labelText: 'First Name'))),
-              Spacer(),
+              Spacer(), //creating a space between them
               Expanded(
                 child: TextField(
                     controller: _lastNameController,
@@ -183,55 +199,59 @@ class _RegistrationBlockState extends State<RegistrationBlock> {
                     const InputDecoration(labelText: 'Confirm Password')),
             const SizedBox(height: 10),
             Padding(
-              padding: const EdgeInsets.only(top: 170.0),
-              child: ElevatedButton(
-                  onPressed: _register,
-                  style: ElevatedButton.styleFrom(
-                      primary: Color(0xFF535AFF),
-                      shadowColor: Color(0x3F000000),
-                      elevation: 4,
-                      minimumSize: Size(341, 58)),
-                  child: Text(
-                    'Next',
-                    style: TextStyle(
-                      color: Color(0xFFECF6FF),
-                      fontSize: 21.60,
-                      fontFamily: 'Roboto',
-                      fontWeight: FontWeight.w700,
-                      height: 0,
-                    ),
-                  )),
-            ),
-            const SizedBox(height: 16),
-            RichText(
-              text: TextSpan(
-                text: 'Already have an account? ',
-                style: DefaultTextStyle.of(context).style,
-                children: <TextSpan>[
-                  TextSpan(
-                    text: 'Login',
-                    style: const TextStyle(
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Material(
-                              child: LoginScreen(),
+              padding: const EdgeInsets.only(top: 30.0),
+              child: RichText(
+                text: TextSpan(
+                  text: 'Already have an account? ',
+                  style: DefaultTextStyle.of(context).style,
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: 'Log in',
+                      style: const TextStyle(
+                        color: Color(0xFF535AFF),
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Material(
+                                child: LoginScreen(),
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                  ),
-                ],
+                          );
+                        },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 30.0),
+                child: ElevatedButton(
+                    //creating a button
+                    onPressed: _register, //if button is pressed
+                    style: ElevatedButton.styleFrom(
+                        shadowColor: Color(0xFF191919),
+                        elevation: 4,
+                        minimumSize: Size(341, 58)),
+                    child: Text(
+                      'Register',
+                      style: TextStyle(
+                        color: Color(0xFFECF6FF),
+                        fontSize: 21.60,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.w700,
+                        height: 0,
+                      ),
+                    )),
               ),
             ),
           ],
         ),
       ),
-    ]);
+    );
   }
 }

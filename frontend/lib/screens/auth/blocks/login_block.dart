@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, prefer_const_constructors
 
 import 'dart:convert';
 import 'package:frontend/screens/auth/auth_screen.dart';
@@ -17,8 +17,10 @@ class LoginBlock extends StatefulWidget {
 }
 
 class _LoginBlockState extends State<LoginBlock> {
-  final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _phoneController =
+      TextEditingController(); //phone input
+  final TextEditingController _passwordController =
+      TextEditingController(); //passsword input
 
   Future<void> _login() async {
     final response = await http.post(
@@ -37,98 +39,146 @@ class _LoginBlockState extends State<LoginBlock> {
 
       TokenService().saveAccessToken(access);
       TokenService().saveRefreshToken(refresh);
-      
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const HomePage()),
       );
     } else {
-    final errorText = responseBody['error'] ?? 'An error occurred.';
-    String formatError(dynamic errorData) {
-      if (errorData is String) {
-        return errorData;
-      } else if (errorData is Map<String, dynamic>) {
-        List<String> errorMessages = [];
-        errorData.forEach((key, value) {
-          if (value is List<dynamic>) {
-            List<String> messages = value.map((item) => '$item').toList();
-            errorMessages.addAll(messages);
-          } else {
-            errorMessages.add('$value');
-          }
-        });
-        return errorMessages.join('\n');
-      } else {
-        return 'An error occurred.';
+      final errorText = responseBody['error'] ?? 'An error occurred.';
+      String formatError(dynamic errorData) {
+        if (errorData is String) {
+          return errorData;
+        } else if (errorData is Map<String, dynamic>) {
+          List<String> errorMessages = [];
+          errorData.forEach((key, value) {
+            if (value is List<dynamic>) {
+              List<String> messages = value.map((item) => '$item').toList();
+              errorMessages.addAll(messages);
+            } else {
+              errorMessages.add('$value');
+            }
+          });
+          return errorMessages.join('\n');
+        } else {
+          return 'An error occurred.';
+        }
       }
-    }
 
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Login Error'),
-          content: Text(formatError(errorText)),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
+      showDialog(
+        //message if login is incorect
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Login Error'),
+            content: Text(formatError(errorText)),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return SingleChildScrollView(
       child: Container(
-        height: MediaQuery.of(context).size.height,
-        color: const Color(0xFF021213),
+        color: const Color(0xFF191919),
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(
+                child: Text('Log in',
+                    style: TextStyle(
+                      color: Color(0xFFECF6FF),
+                      fontSize: 24,
+                      fontFamily: 'Roboto',
+                      fontWeight: FontWeight.w500,
+                      height: 0,
+                    ))),
+            Padding(
+                padding: const EdgeInsets.only(top: 30.0),
+                child: Text(
+                  'Mobile phone number',
+                  style: TextStyle(
+                      color: Color(0xFFECF6FF),
+                      fontSize: 20,
+                      fontFamily: 'Roboto',
+                      fontWeight: FontWeight.w500,
+                      height: 0),
+                )),
             TextField(
                 controller: _phoneController,
                 decoration: const InputDecoration(labelText: 'Phone')),
+            Padding(
+                padding: const EdgeInsets.only(top: 30.0),
+                child: Text(
+                  'Enter your password',
+                  style: TextStyle(
+                      color: Color(0xFFECF6FF),
+                      fontSize: 20,
+                      fontFamily: 'Roboto',
+                      fontWeight: FontWeight.w500,
+                      height: 0),
+                )),
             TextField(
                 controller: _passwordController,
                 decoration: const InputDecoration(labelText: 'Password')),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: _login, 
-              child: const Text(
-                'Войти',
-                textWidthBasis: TextWidthBasis.parent,
-              )
-            ),
-            const SizedBox(height: 16),
-            RichText(
-              text: TextSpan(
-                text: 'No account? ',
-                style: DefaultTextStyle.of(context).style,
-                children: <TextSpan>[
-                  TextSpan(
-                    text: 'Create one',
-                    style: const TextStyle(
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
+            Padding(
+              padding: const EdgeInsets.only(top: 30.0),
+              child: RichText(
+                text: TextSpan(
+                  text: 'No account? ',
+                  style: DefaultTextStyle.of(context).style,
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: 'Create one',
+                      style: const TextStyle(
+                        color: Color(0xFF535AFF),
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const Material(child: RegistrationScreen()),
+                            ),
+                          );
+                        },
                     ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Material(child: RegistrationScreen()),
-                          ),
-                        );
-                      },
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 40),
+            Center(
+              child: ElevatedButton(
+                onPressed: _login,
+                style: ElevatedButton.styleFrom(
+                  shadowColor: Color(0x3F000000),
+                  elevation: 4,
+                  minimumSize: Size(340, 60),
+                ),
+                child: Text(
+                  'Log in',
+                  style: TextStyle(
+                    color: Color(0xFFECF6FF),
+                    fontSize: 21.60,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w700,
+                    height: 0,
                   ),
-                ],
+                ),
               ),
             ),
           ],

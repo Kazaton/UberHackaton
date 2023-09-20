@@ -15,13 +15,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Kazaton',
-      theme: ThemeData.dark().copyWith(
+      theme: ThemeData(
         scaffoldBackgroundColor: const Color(0xFF021213),
+        canvasColor: const Color(0xFF021213),
         colorScheme: const ColorScheme.dark(
           brightness: Brightness.dark,
           onPrimaryContainer: Color(0xFFEDF6FF),
-          primary: Color(0xff535AFF), 
-          onPrimary: Color(0xFFEDF6FF), 
+          primary: Color(0xff535AFF),
+          onPrimary: Color(0xFFEDF6FF),
           tertiaryContainer: Color(0xFF021213),
           secondaryContainer: Color(0xFF021213),
           primaryContainer: Color(0xFF021213),
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
           onSurface: Color(0xFF021213),
         ),
         inputDecorationTheme: const InputDecorationTheme(
-          fillColor: Color(0xFF1A1A1A),
+          fillColor: Color(0xFF021213),
         ),
       ),
       home: FutureBuilder<bool>(
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
               return const RegistrationScreen();
             } else {
               return Builder(
-                builder: (context) => const RegistrationScreen(),
+                builder: (context) => const HomePage(),
               );
             }
           }

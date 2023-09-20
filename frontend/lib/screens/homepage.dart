@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:frontend/constants/urls.dart';
 import 'package:http/http.dart' as http;
 import 'package:frontend/components/registration_buttons.dart';
+import 'package:frontend/screens/user_type/disabled.dart';
+import 'package:frontend/screens/user_type/person.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
-      child: InteractiveMap()
-    );
+    return const SafeArea(child: InteractiveMap());
   }
-
 }
+
 class BusType {
   final int id;
   final String name;
@@ -64,19 +64,18 @@ class Bus {
   }
 }
 
-
 class InteractiveMap extends StatefulWidget {
   const InteractiveMap({super.key});
 
   @override
-  State <InteractiveMap> createState() => _InteractiveMapState();
+  State<InteractiveMap> createState() => _InteractiveMapState();
 }
 
 class _InteractiveMapState extends State<InteractiveMap> {
-
   Future<List<Bus>> getBusList() async {
     try {
       final response = await http.get(Uri.parse(busListRef));
+
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         final List<Bus> buses = data.map((entry) {
@@ -92,24 +91,22 @@ class _InteractiveMapState extends State<InteractiveMap> {
   }
 
   Future<void> registerForBus(int busId) async {
-    final url = Uri.parse(busRegisterRef + busId.toString());
+    final url = Uri.parse('$busRegisterRef$busId/');
     final response = await http.post(url);
     if (response.statusCode == 200) {
-      // Успешно зарегистрированы на маршрут
-      // Обновите состояние вашего приложения, чтобы отразить изменения
+      return;
     } else {
-        throw Exception('Error: ${response.statusCode}');
+      throw Exception('Error: ${response.statusCode}');
     }
   }
 
   Future<void> exitFromBus(int busId) async {
-    final url = Uri.parse(busExitRef + busId.toString());
+    final url = Uri.parse('$busExitRef$busId/');
     final response = await http.post(url);
     if (response.statusCode == 200) {
-      // Успешно вышли из маршрута
-      // Обновите состояние вашего приложения, чтобы отразить изменения
+      return;
     } else {
-      // Обработайте ошибку, если выход не удался
+      return;
     }
   }
 
@@ -118,10 +115,9 @@ class _InteractiveMapState extends State<InteractiveMap> {
       final url = Uri.parse(getUsersBusRef);
       final response = await http.get(url);
       if (response.statusCode == 200) {
-        // Успешно вышли из маршрута
-        // Обновите состояние вашего приложения, чтобы отразить изменения
+        return json.decode(response.body);
       } else {
-        // Обработайте ошибку, если выход не удался
+        throw Exception('Error');
       }
     } catch (error) {
       throw Exception('Error: $error');
@@ -137,7 +133,8 @@ class _InteractiveMapState extends State<InteractiveMap> {
     getBusList().then((busList) {
       setState(() {
         buses = busList;
-        showRoutes = List.generate(buses.length, (index) => false); // Инициализация showRoutes
+        showRoutes = List.generate(
+            buses.length, (index) => false); // Инициализация showRoutes
       });
     });
   }
@@ -182,27 +179,28 @@ class _InteractiveMapState extends State<InteractiveMap> {
         SizedBox(
           height: 60,
           child: RegistrationButtons(
-            isRegistered: isRegistered,
-            onRegisterPressed: () {
-              // Registration on the route
-              registerForBus(showRoutes.indexOf(true)+1); // Trying to find active bus and register to it
-              setState(() {
-                isRegistered = true;
-              });
-            },
-            onShowTicketPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const HomePage()),
-              );
-            },
-            onExitPressed: () {
-              exitFromBus(selectedBusId); // Trying to find user's current bus and leave it
-              setState(() {
-                isRegistered = false;
-              });
-            }
-          ),
+              isRegistered: isRegistered,
+              onRegisterPressed: () {
+                // Registration on the route
+                registerForBus(showRoutes.indexOf(true) +
+                    1); // Trying to find active bus and register to it
+                setState(() {
+                  isRegistered = true;
+                });
+              },
+              onShowTicketPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const PersonScreen()),
+                );
+              },
+              onExitPressed: () {
+                exitFromBus(getUsersBus()
+                    as int); // Trying to find user's current bus and leave it
+                setState(() {
+                  isRegistered = false;
+                });
+              }),
         ),
         SizedBox(
           height: 60,
@@ -211,7 +209,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
             itemCount: buses.length,
             itemBuilder: (context, index) => Padding(
               padding: const EdgeInsets.all(4.0),
-              child:  ElevatedButton(
+              child: ElevatedButton(
                 onPressed: () {
                   setState(() {
                     showRoutes = List.generate(buses.length, (i) => i == index);
@@ -233,4 +231,3 @@ class _InteractiveMapState extends State<InteractiveMap> {
     );
   }
 }
-
