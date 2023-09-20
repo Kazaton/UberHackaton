@@ -20,8 +20,8 @@ class MyApp extends StatelessWidget {
         colorScheme: const ColorScheme.dark(
           brightness: Brightness.dark, 
           onPrimaryContainer: Color(0xFFEDF6FF),
-          primary: Color(0xffbb86fc), 
-          onPrimary: Color(0xFF021213), 
+          primary: Color(0xff535AFF), 
+          onPrimary: Color(0xFFEDF6FF), 
           tertiaryContainer: Color(0xFF021213),
           secondaryContainer: Color(0xFF021213),
           primaryContainer: Color(0xFF021213), 
