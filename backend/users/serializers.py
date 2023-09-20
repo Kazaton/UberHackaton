@@ -75,6 +75,6 @@ class BusSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
     class Meta:
         model = Bus
-        fields = ('id','name','number_of_people','number_of_seats','number_of_special_seats', 'bus_type')
+        fields = ('id','name','number_of_people','number_of_special_seats', 'bus_type')
 
         depth = 1 # add bus_type's data to the response too

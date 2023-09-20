@@ -26,13 +26,13 @@ class UserAdmin(DjangoUserAdmin):
     ordering = ('phone',)
 
 class BusAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'number_of_people', 'number_of_seats','number_of_special_seats',)
-    list_filter = ('name', 'number_of_people', 'number_of_seats','number_of_special_seats',)
+    list_display = ('id', 'name', 'number_of_people','number_of_special_seats',)
+    list_filter = ('name', 'number_of_people','number_of_special_seats',)
 
 admin.site.register(Bus, BusAdmin)
 
 class BusTypeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'number_of_people', 'number_of_seats', 'number_of_special_seats',)
-    list_filter = ('name', 'number_of_people', 'number_of_seats', 'number_of_special_seats',)
+    list_display = ('name', 'number_of_people', 'number_of_special_seats',)
+    list_filter = ('name', 'number_of_people', 'number_of_special_seats',)
 
 admin.site.register(BusType, BusTypeAdmin)
