@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, Bus, BusType
 from django.utils.translation import gettext_lazy as _
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -19,7 +19,7 @@ class CustomTokenObtainPairSerializer(serializers.Serializer):
 
         user = User.objects.filter(phone=phone).first()
 
-        if user and user.check_password(password):
+        if user and user.check_password(password): # if both phone number and password are correct, we save simple_jwt tokens
             refresh = self.set_token(user)
             return {
                 'refresh': str(refresh),
@@ -28,7 +28,7 @@ class CustomTokenObtainPairSerializer(serializers.Serializer):
 
         raise serializers.ValidationError('No active account found with the given credentials')
     
-    def set_token(self, user):
+    def set_token(self, user): # generating refresh token for the user's credentials
         refresh = RefreshToken.for_user(user)
         return refresh
 
@@ -53,7 +53,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'phone', 'password', 'confirm_password', 'is_disabled', 'first_name', 'last_name']
 
     def validate(self, attrs):
-        if attrs['password'] != attrs['confirm_password']:
+        if attrs['password'] != attrs['confirm_password']: # checking if both passwords are simular
             raise serializers.ValidationError({"password": "Password fields didn't match."})
         
         # checking if phone exists
@@ -67,6 +67,14 @@ class UserSerializer(serializers.ModelSerializer):
     
 
     def create(self, validated_data):
-        validated_data.pop('confirm_password')
+        validated_data.pop('confirm_password') # deleting unnecessary field
         user = User.objects.create_user(**validated_data)
         return user
+
+class BusSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+    class Meta:
+        model = Bus
+        fields = ('id','name','number_of_people','number_of_seats','number_of_special_seats', 'bus_type')
+
+        depth = 1 # add bus_type's data to the response too
