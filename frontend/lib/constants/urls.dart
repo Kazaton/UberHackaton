@@ -1,4 +1,4 @@
-const host = 'http://192.168.0.21:8000';
+const host = 'http://0.0.0.0:8000';
 
 const registerRef = '$host/register/';
 const loginRef = '$host/login/';

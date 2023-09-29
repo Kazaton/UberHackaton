@@ -4,7 +4,6 @@ import 'package:frontend/constants/urls.dart';
 import 'package:frontend/context/token_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:frontend/components/registration_buttons.dart';
-import 'package:frontend/screens/user_type/disabled.dart';
 import 'package:frontend/screens/user_type/person.dart';
 
 class HomePage extends StatelessWidget {
