@@ -7,11 +7,31 @@ import 'package:frontend/components/registration_buttons.dart';
 import 'package:frontend/screens/user_type/person.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(child: InteractiveMap());
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Kazaton'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {
+              Scaffold.of(context).openEndDrawer();
+            },
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: InteractiveMap(),
+          ),
+        ],
+      ),
+      endDrawer: MyRightDrawer(),
+    );
   }
 }
 
@@ -132,7 +152,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
       final tokenService = TokenService();
       final accessToken = await tokenService.getAccessToken();
       if (accessToken == null) {
-      throw 'Access token is not available';
+        throw 'Access token is not available';
       }
       final headers = {
         'Authorization': 'Bearer $accessToken',
@@ -159,8 +179,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
     getBusList().then((busList) {
       setState(() {
         buses = busList;
-        showRoutes = List.generate(
-            buses.length, (index) => false); // Инициализация showRoutes
+        showRoutes = List.generate(buses.length, (index) => false);
       });
     });
   }
@@ -222,7 +241,8 @@ class _InteractiveMapState extends State<InteractiveMap> {
               },
               onExitPressed: () async {
                 int busId = await getUsersBus();
-                exitFromBus(busId); // Trying to find user's current bus and leave it
+                exitFromBus(
+                    busId); // Trying to find user's current bus and leave it
                 setState(() {
                   isRegistered = false;
                 });
@@ -254,6 +274,42 @@ class _InteractiveMapState extends State<InteractiveMap> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class MyRightDrawer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FractionallySizedBox(
+      widthFactor: 0.7,
+      alignment: Alignment.centerRight,
+      child: Container(
+        color: Colors.white,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child: Text('Bus list'),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+            ),
+            ListTile(
+              title: Text('Second'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('First'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
