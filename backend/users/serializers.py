@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Bus, BusType, UserRegistration
+from .models import User, Bus, BusType, UserRegistration, SeatReason
 from django.utils.translation import gettext_lazy as _
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -50,7 +50,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'phone', 'password', 'confirm_password', 'is_disabled', 'first_name', 'last_name']
+        fields = ['id', 'phone', 'password', 'confirm_password', 'first_name', 'last_name']
 
     def validate(self, attrs):
         if attrs['password'] != attrs['confirm_password']: # checking if both passwords are simular
@@ -71,18 +71,30 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
         return user
 
+class SeatReasonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SeatReason
+        fields = ('id', 'reason', 'priority')
+
+class BusTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BusType
+        fields = ('id', 'name', 'number_of_people', 'number_of_seats')
+
 class BusSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
     class Meta:
         model = Bus
-        fields = ('id','name','number_of_people','number_of_special_seats', 'bus_type')
+        fields = ('id','name','number_of_people','number_of_seats', 'bus_type')
 
         depth = 1 # add bus_type's data to the response too
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
+    seat_reason = SeatReasonSerializer()
+
     class Meta:
         model = UserRegistration
-        fields = ('id', 'user', 'bus', 'is_disabled')
+        fields = ('id', 'user', 'bus', 'seat_reason')
 
         depth = 2 # add info about user and bus too

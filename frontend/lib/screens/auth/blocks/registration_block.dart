@@ -20,7 +20,6 @@ class RegistrationBlock extends StatefulWidget {
 class _RegistrationBlockState extends State<RegistrationBlock> {
   final TextEditingController _phoneController =
       TextEditingController(); //phone input
-  bool _isDisabledValue = false; //checking for disability
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
@@ -34,7 +33,6 @@ class _RegistrationBlockState extends State<RegistrationBlock> {
       body: json.encode({
         'phone': _phoneController.text,
         'password': _passwordController.text,
-        'is_disabled': _isDisabledValue,
         'confirm_password': _confirmPasswordController.text,
         'first_name': _firstNameController.text,
         'last_name': _lastNameController.text,
@@ -155,29 +153,6 @@ class _RegistrationBlockState extends State<RegistrationBlock> {
             TextField(
                 controller: _phoneController,
                 decoration: const InputDecoration(labelText: 'Phone Number')),
-            Padding(
-                padding: const EdgeInsets.only(top: 30.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: Text('Do you have a disability?',
-                            style: TextStyle(
-                              color: Color(0xFFECF6FF),
-                              fontSize: 20,
-                              fontFamily: 'Roboto',
-                              fontWeight: FontWeight.w400,
-                              height: 0,
-                            ))),
-                    Switch(
-                      value: _isDisabledValue,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _isDisabledValue = newValue;
-                        });
-                      },
-                    ),
-                  ],
-                )),
             Padding(
                 padding: const EdgeInsets.only(top: 30.0),
                 child: Text(
