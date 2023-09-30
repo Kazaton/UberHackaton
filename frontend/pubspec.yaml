@@ -75,6 +75,7 @@ flutter:
     - assets/10.png
     - assets/underline.png
     - assets/long_underline.png
+    - assets/bus_icon_purple.png
   fonts:
     - family: Roboto,
       fonts:
