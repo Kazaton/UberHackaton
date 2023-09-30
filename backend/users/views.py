@@ -2,8 +2,8 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Bus, BusType, User, UserRegistration
-from .serializers import UserSerializer, CustomTokenObtainPairSerializer, BusSerializer
+from .models import Bus, BusType, User, UserRegistration, SeatReason
+from .serializers import UserSerializer, CustomTokenObtainPairSerializer, BusSerializer, SeatReasonSerializer
 from rest_framework import generics, status, permissions
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -81,28 +81,66 @@ class BusRegistration(APIView):
             bus = Bus.objects.get(id=bus_id)
             # Getting user's info
             user = request.user
-            is_disabled = False
+            seat_reason_id = request.data.get("seat_reason_id", None)
             existing_registration = UserRegistration.objects.filter(
                 user=user, bus=bus
             ).first()  # Checking if user is registered
-            if not existing_registration:
-                # Create new registration
-                registration = UserRegistration(
-                    user=user, bus=bus, is_disabled=is_disabled
-                )
-                registration.save()
 
-                # Update passangers' number and special seats' number
+            if existing_registration:
+                return Response(
+                    status=status.HTTP_400_BAD_REQUEST,
+                    data={"message": "You are already registered"},
+                )
+
+                # Create new registration
+            if seat_reason_id:
+                seat_reason = SeatReason.objects.get(id=seat_reason_id)
+                if bus.number_of_seats < bus.bus_type.number_of_seats:
+                    registration = UserRegistration(
+                        user=user, bus=bus, seat_reason=seat_reason
+                    )
+                    registration.save()
+                    bus.number_of_people += 1
+                    bus.number_of_seats += 1
+                    bus.save()
+                else:
+                    # find person with lowest priority
+                    lowest_priority_user = (
+                        UserRegistration.objects.filter(bus=bus)
+                        .exclude(seat_reason=None)
+                        .order_by("-seat_reason__priority")
+                        .first()
+                    )
+                    if (
+                        lowest_priority_user
+                        and lowest_priority_user.seat_reason.priority
+                        > seat_reason.priority
+                    ):
+                        lowest_priority_user.seat_reason = None
+                        lowest_priority_user.save()
+                        registration = UserRegistration(
+                            user=user, bus=bus, seat_reason=seat_reason
+                        )
+                        registration.save()
+                        bus.number_of_people += 1
+                        bus.number_of_seats += 1
+                        bus.save()
+            else:
+                registration = UserRegistration(user=user, bus=bus)
+                registration.save()
                 bus.number_of_people += 1
-                if is_disabled:
-                    bus.number_of_special_seats += 1
                 bus.save()
+
             return Response(status=status.HTTP_200_OK)
 
-        except:
-            # Error message if the bus_id is wrong
+        # Catching errors
+        except Bus.DoesNotExist:
             return Response(
                 status=status.HTTP_400_BAD_REQUEST, data={"message": "No such bus id"}
+            )
+        except Exception as e:
+            return Response(
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR, data={"message": str(e)}
             )
 
 
@@ -118,12 +156,12 @@ class BusExit(APIView):
             ).first()  # Find the user's registration
             if registration:  # If exists
                 # Delete registration
-                registration.delete()
+                if registration.seat_reason:
+                    bus.number_of_seats -= 1
 
                 # Update the number of passangers and special seats
+                registration.delete()
                 bus.number_of_people -= 1
-                if registration.is_disabled:
-                    bus.number_of_special_seats -= 1
                 bus.save()
             return Response(status=status.HTTP_200_OK)
 

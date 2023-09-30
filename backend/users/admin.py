@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.utils.translation import gettext_lazy as _
 
-from .models import User, Bus, BusType, UserRegistration
+from .models import User, Bus, BusType, UserRegistration, SeatReason
 
 
 # Registration of User, Bus and BusType tables in the admin panel
@@ -53,12 +53,12 @@ class BusAdmin(admin.ModelAdmin):
         "id",
         "name",
         "number_of_people",
-        "number_of_special_seats",
+        "number_of_seats",
     )
     list_filter = (
         "name",
         "number_of_people",
-        "number_of_special_seats",
+        "number_of_seats",
     )
 
 
@@ -69,12 +69,12 @@ class BusTypeAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "number_of_people",
-        "number_of_special_seats",
+        "number_of_seats",
     )
     list_filter = (
         "name",
         "number_of_people",
-        "number_of_special_seats",
+        "number_of_seats",
     )
 
 
@@ -85,13 +85,24 @@ class UserRegistrationAdmin(admin.ModelAdmin):
     list_display = (
         "user",
         "bus",
-        "is_disabled",
     )
     list_filter = (
         "user",
         "bus",
-        "is_disabled",
     )
 
 
 admin.site.register(UserRegistration, UserRegistrationAdmin)
+
+class SeatReasonAdmin(admin.ModelAdmin):
+    list_display = (
+        "reason",
+        "priority",
+    )
+    list_filter = (
+        "reason",
+        "priority",
+    )
+
+
+admin.site.register(SeatReason, SeatReasonAdmin)

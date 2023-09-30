@@ -35,7 +35,6 @@ class UserManager(BaseUserManager):
 
 class User(AbstractUser):
     phone = models.CharField(unique=True, max_length=30)
-    is_disabled = models.BooleanField(default=False)
     username = None
     USERNAME_FIELD = (
         "phone"  # setting phone number as a username field when we login/register
@@ -48,7 +47,7 @@ class BusType(models.Model):
     name = models.CharField(max_length=30)
     # Capacity of the bus' model
     number_of_people = models.PositiveIntegerField(default=0)
-    number_of_special_seats = models.PositiveIntegerField(default=0)
+    number_of_seats = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return str(self.name)
@@ -58,17 +57,24 @@ class Bus(models.Model):
     name = models.CharField(max_length=5)
     # Number of people and special seats (for disabled individuals) in the bus currently
     number_of_people = models.PositiveIntegerField(default=0)
-    number_of_special_seats = models.PositiveIntegerField(default=0)
+    number_of_seats = models.PositiveIntegerField(default=0)
     bus_type = models.ForeignKey(BusType, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.name)
 
+class SeatReason(models.Model):
+    reason = models.CharField(max_length=100)
+    priority = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.reason
+
 class UserRegistration(models.Model):
     # Linking user and bus within model
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     bus = models.ForeignKey(Bus, on_delete=models.CASCADE)
-    is_disabled = models.BooleanField(default=False)
+    seat_reason = models.ForeignKey(SeatReason, on_delete=models.SET_NULL, null=True, blank=True)
     
     def __str__(self):
         return f"{self.user.username} - {self.bus.name}"
