@@ -99,7 +99,6 @@ class _RegistrationBlockState extends State<RegistrationBlock> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        //container for the whole screen
         color: const Color(0xFF191919),
         padding: const EdgeInsets.all(16.0),
         child: Column(

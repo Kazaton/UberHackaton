@@ -1,36 +1,51 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:frontend/components/side_menu.dart';
+import 'package:frontend/components/qr_scanner.dart';
 import 'package:frontend/constants/urls.dart';
 import 'package:frontend/context/token_service.dart';
 import 'package:http/http.dart' as http;
-import 'package:frontend/components/registration_buttons.dart';
-import 'package:frontend/screens/user_type/person.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int? selectedBusId;
+
+  void selectBus(int busId) {
+    setState(() {
+      selectedBusId = busId;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Kazaton'),
+        title: const Text(
+          'Kazaton',
+          style: TextStyle(color: Color(0xFFEDF6FF)),
+        ),
+        backgroundColor: const Color(0xFF021213),
+        automaticallyImplyLeading: false,
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              Scaffold.of(context).openEndDrawer();
-            },
+          Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.menu),
+              color: const Color(0xFFEDF6FF),
+              onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+              },
+            ),
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: InteractiveMap(),
-          ),
-        ],
-      ),
-      endDrawer: MyRightDrawer(),
+      body: InteractiveMap(selectedBusId: selectedBusId),
+      endDrawer: SideMenuBuses(onBusSelected: selectBus),
     );
   }
 }
@@ -85,7 +100,9 @@ class Bus {
 }
 
 class InteractiveMap extends StatefulWidget {
-  const InteractiveMap({super.key});
+  final int? selectedBusId;
+
+  const InteractiveMap({this.selectedBusId, Key? key}) : super(key: key);
 
   @override
   State<InteractiveMap> createState() => _InteractiveMapState();
@@ -94,7 +111,18 @@ class InteractiveMap extends StatefulWidget {
 class _InteractiveMapState extends State<InteractiveMap> {
   Future<List<Bus>> getBusList() async {
     try {
-      final response = await http.get(Uri.parse(busListRef));
+      final tokenService = TokenService();
+      final accessToken = await tokenService.getAccessToken();
+      if (accessToken == null) {
+        throw 'Access token is not available';
+      }
+      final headers = {
+        'Authorization': 'Bearer $accessToken',
+      };
+      final response = await http.get(
+        Uri.parse(busListRef),
+        headers: headers,
+      );
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
@@ -104,66 +132,6 @@ class _InteractiveMapState extends State<InteractiveMap> {
         return buses;
       } else {
         throw Exception('Error: ${response.statusCode}');
-      }
-    } catch (error) {
-      throw Exception('Error: $error');
-    }
-  }
-
-  Future<void> registerForBus(int busId) async {
-    final url = Uri.parse('$busRegisterRef$busId/');
-    final tokenService = TokenService();
-    final accessToken = await tokenService.getAccessToken();
-    if (accessToken == null) {
-      throw 'Access token is not available';
-    }
-    final headers = {
-      'Authorization': 'Bearer $accessToken',
-    };
-    final response = await http.post(url, headers: headers);
-    if (response.statusCode == 200) {
-      return;
-    } else {
-      throw 'Error: ${response.statusCode}';
-    }
-  }
-
-  Future<void> exitFromBus(int busId) async {
-    final url = Uri.parse('$busExitRef$busId/');
-    final tokenService = TokenService();
-    final accessToken = await tokenService.getAccessToken();
-    if (accessToken == null) {
-      throw 'Access token is not available';
-    }
-    final headers = {
-      'Authorization': 'Bearer $accessToken',
-    };
-    final response = await http.post(url, headers: headers);
-    if (response.statusCode == 200) {
-      return;
-    } else {
-      throw 'Error: ${response.statusCode}';
-    }
-  }
-
-  Future<int> getUsersBus() async {
-    try {
-      final url = Uri.parse(getUsersBusRef);
-      final tokenService = TokenService();
-      final accessToken = await tokenService.getAccessToken();
-      if (accessToken == null) {
-        throw 'Access token is not available';
-      }
-      final headers = {
-        'Authorization': 'Bearer $accessToken',
-      };
-      final response = await http.get(url, headers: headers);
-      if (response.statusCode == 200) {
-        var data = json.decode(response.body);
-        int id = data["id"] as int;
-        return id;
-      } else {
-        throw Exception('Error');
       }
     } catch (error) {
       throw Exception('Error: $error');
@@ -191,125 +159,53 @@ class _InteractiveMapState extends State<InteractiveMap> {
     return Column(
       children: [
         Expanded(
-          child: GestureDetector(
-            onScaleUpdate: (ScaleUpdateDetails details) {
-              print("Scale updated: ${details.scale}");
-            },
-            child: InteractiveViewer(
-              minScale: 0.1,
-              maxScale: 5.0,
-              constrained: false,
-              boundaryMargin: EdgeInsets.zero,
-              child: Stack(
-                children: [
-                  Image.asset(
-                    'assets/your_map.png', // Main map
-                    width: 2414,
-                    height: 3080,
-                    fit: BoxFit.fill,
-                  ),
-                  for (final bus in buses)
-                    if (showRoutes[bus.id - 1]) // If route chosen, show it
+          child: Stack(
+            children: [
+              GestureDetector(
+                onScaleUpdate: (ScaleUpdateDetails details) {
+                  print("Scale updated: ${details.scale}");
+                },
+                child: InteractiveViewer(
+                  minScale: 0.1,
+                  maxScale: 5.0,
+                  constrained: false,
+                  boundaryMargin: EdgeInsets.zero,
+                  child: Stack(
+                    children: [
                       Image.asset(
-                        'assets/${bus.id}.png', // Print routes
+                        'assets/map.png', // Main map
                         width: 2414,
                         height: 3080,
                         fit: BoxFit.fill,
                       ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 60,
-          child: RegistrationButtons(
-              isRegistered: isRegistered,
-              onRegisterPressed: () {
-                // Registration on the route
-                registerForBus(showRoutes.indexOf(true) +
-                    1); // Trying to find active bus and register to it
-                setState(() {
-                  isRegistered = true;
-                });
-              },
-              onShowTicketPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const PersonScreen()),
-                );
-              },
-              onExitPressed: () async {
-                int busId = await getUsersBus();
-                exitFromBus(
-                    busId); // Trying to find user's current bus and leave it
-                setState(() {
-                  isRegistered = false;
-                });
-              }),
-        ),
-        SizedBox(
-          height: 60,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: buses.length,
-            itemBuilder: (context, index) => Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    showRoutes = List.generate(buses.length, (i) => i == index);
-                  });
-                },
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.directions_bus,
-                    ),
-                    Text(buses[index].name),
-                  ],
+                      if (widget.selectedBusId != null) // If route chosen, show it
+                        Image.asset(
+                          'assets/${widget.selectedBusId}.png', // Print routes
+                          width: 2414,
+                          height: 3080,
+                          fit: BoxFit.fill,
+                        ),
+                    ],
+                  ),
                 ),
               ),
-            ),
+              Positioned(
+                left: 10,
+                bottom: 10,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const QRScanPage()),
+                    );
+                  },
+                  child: const Icon(Icons.qr_code_2_outlined), 
+                ),
+              ),
+            ],
           ),
         ),
       ],
-    );
-  }
-}
-
-class MyRightDrawer extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return FractionallySizedBox(
-      widthFactor: 0.7,
-      alignment: Alignment.centerRight,
-      child: Container(
-        color: Colors.white,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              child: Text('Bus list'),
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-            ),
-            ListTile(
-              title: Text('Second'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text('First'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
