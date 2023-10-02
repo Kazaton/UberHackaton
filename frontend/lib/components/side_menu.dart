@@ -1,7 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/context/token_service.dart';
+import 'package:frontend/screens/auth/login_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:frontend/constants/urls.dart';
 
@@ -113,7 +116,7 @@ class SideMenuBuses extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: SingleChildScrollView(
+      child: SafeArea(
         child: Column(
           children: [
             Padding(
@@ -148,7 +151,6 @@ class SideMenuBuses extends StatelessWidget {
                   final buses = snapshot.data!;
                   return ListView.builder(
                     shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: buses.length,
                     itemBuilder: (context, index) {
                       final bus = buses[index];
@@ -169,9 +171,24 @@ class SideMenuBuses extends StatelessWidget {
                 }
               },
             ),
+            ElevatedButton(
+                      onPressed: () async {
+                        await logout(context);
+                      },
+                      child: const Text('Logout'),
+                    ),
           ],
         ),
       ),
     );
   }
+  Future<void> logout(BuildContext context) async {
+    final tokenService = TokenService();
+    await tokenService.deleteTokens();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
+    );
+  }
+
 }

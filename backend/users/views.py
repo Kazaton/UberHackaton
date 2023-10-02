@@ -82,6 +82,7 @@ class BusRegistration(APIView):
             # Getting user's info
             user = request.user
             seat_reason_id = request.data.get("seat_reason_id", None)
+            
             existing_registration = UserRegistration.objects.filter(
                 user=user, bus=bus
             ).first()  # Checking if user is registered
@@ -194,3 +195,10 @@ class GetUsersBus(APIView):
             return Response(
                 status=status.HTTP_400_BAD_REQUEST, data={"message": "No such bus id"}
             )
+
+class SeatReasonListView(APIView):
+
+    def get(self, request):
+        reasons = SeatReason.objects.all().order_by('-priority')
+        serializer = SeatReasonSerializer(reasons, many=True)
+        return Response(serializer.data)

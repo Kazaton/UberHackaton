@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/components/side_menu.dart';
-import 'package:frontend/components/qr_scanner.dart';
+import 'package:frontend/components/qr_scan_widget.dart';
 import 'package:frontend/constants/urls.dart';
 import 'package:frontend/context/token_service.dart';
+import 'package:frontend/screens/user_type/person.dart';
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
@@ -109,6 +110,7 @@ class InteractiveMap extends StatefulWidget {
 }
 
 class _InteractiveMapState extends State<InteractiveMap> {
+  bool isUserRegistered = false;
   Future<List<Bus>> getBusList() async {
     try {
       final tokenService = TokenService();
@@ -138,6 +140,53 @@ class _InteractiveMapState extends State<InteractiveMap> {
     }
   }
 
+  Future<void> getUsersBus() async {
+    try {
+      final tokenService = TokenService();
+      final accessToken = await tokenService.getAccessToken();
+      if (accessToken == null) {
+        throw 'Access token is not available';
+      }
+      final headers = {
+        'Authorization': 'Bearer $accessToken',
+        'Content-Type': 'application/json',
+      };
+      final response = await http.get(
+        Uri.parse(getUsersBusRef),
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        isUserRegistered = true;
+      } else {
+        throw Exception('Error: ${response.statusCode}');
+      }
+    } catch (error) {
+      throw Exception('Error: $error');
+    }
+  }
+
+  Future<void> exitFromBus(int? busId) async {
+    final url = Uri.parse('$busExitRef$busId/');
+    final tokenService = TokenService();
+    final accessToken = await tokenService.getAccessToken();
+    if (accessToken == null) {
+      throw 'Access token is not available';
+    }
+    final headers = {
+      'Authorization': 'Bearer $accessToken',
+    };
+    final response = await http.post(url, headers: headers);
+    if (response.statusCode == 200) {
+      isUserRegistered = false;
+      print('Exited');
+      return;
+    } else {
+      throw 'Error: ${response.statusCode}';
+    }
+  }
+
+
   List<bool> showRoutes = [];
   List<Bus> buses = [];
 
@@ -150,9 +199,8 @@ class _InteractiveMapState extends State<InteractiveMap> {
         showRoutes = List.generate(buses.length, (index) => false);
       });
     });
+    getUsersBus();
   }
-
-  bool isRegistered = false;
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +226,8 @@ class _InteractiveMapState extends State<InteractiveMap> {
                         height: 3080,
                         fit: BoxFit.fill,
                       ),
-                      if (widget.selectedBusId != null) // If route chosen, show it
+                      if (widget.selectedBusId !=
+                          null) // If route chosen, show it
                         Image.asset(
                           'assets/${widget.selectedBusId}.png', // Print routes
                           width: 2414,
@@ -196,12 +245,39 @@ class _InteractiveMapState extends State<InteractiveMap> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const QRScanPage()),
+                      MaterialPageRoute(
+                          builder: (context) => const QRCodeWidget()),
                     );
                   },
-                  child: const Icon(Icons.qr_code_2_outlined), 
+                  child: const Icon(Icons.qr_code_2_outlined),
                 ),
               ),
+              if (isUserRegistered)
+                Positioned(
+                  right: 80,
+                  bottom: 10,
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const PersonScreen()),
+                      );
+                    },
+                    child: const Icon(Icons.aod_rounded),
+                  ),
+                ),
+              if (isUserRegistered)
+                Positioned(
+                  right: 10,
+                  bottom: 10,
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      exitFromBus(widget.selectedBusId);
+                    },
+                    child: const Icon(Icons.exit_to_app_rounded),
+                  ),
+                ),
             ],
           ),
         ),

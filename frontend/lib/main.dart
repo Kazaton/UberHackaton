@@ -48,10 +48,10 @@ class MyApp extends StatelessWidget {
             return const CircularProgressIndicator();
           } else {
             if (snapshot.hasData && snapshot.data == true) {
-              return const RegistrationScreen();
+              return const HomePage();
             } else {
               return Builder(
-                builder: (context) => const HomePage(),
+                builder: (context) => const RegistrationScreen(),
               );
             }
           }

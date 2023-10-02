@@ -151,6 +151,7 @@ class _RegistrationBlockState extends State<RegistrationBlock> {
                 )),
             TextField(
                 controller: _phoneController,
+                obscureText: true,
                 decoration: const InputDecoration(labelText: 'Phone Number')),
             Padding(
                 padding: const EdgeInsets.only(top: 30.0),
@@ -166,9 +167,11 @@ class _RegistrationBlockState extends State<RegistrationBlock> {
                 )),
             TextField(
                 controller: _passwordController,
+                obscureText: true,
                 decoration: const InputDecoration(labelText: 'Password')),
             TextField(
                 controller: _confirmPasswordController,
+                obscureText: true,
                 decoration:
                     const InputDecoration(labelText: 'Confirm Password')),
             const SizedBox(height: 10),

@@ -131,6 +131,7 @@ class _LoginBlockState extends State<LoginBlock> {
                 )),
             TextField(
                 controller: _passwordController,
+                obscureText: true,
                 decoration: const InputDecoration(labelText: 'Password')),
             Padding(
               padding: const EdgeInsets.only(top: 30.0),
