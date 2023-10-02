@@ -38,6 +38,8 @@ dependencies:
   flutter_svg: ^2.0.7
   http: ^1.1.0
   flutter_secure_storage: ^9.0.0
+  qr_code_scanner: ^1.0.1
+  url_launcher: ^6.1.10
 
 dev_dependencies:
   flutter_test:
@@ -60,22 +62,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/safety.png
-    - assets/facebook.png
-    - assets/your_map.png
-    - assets/1.png
-    - assets/2.png
-    - assets/3.png
-    - assets/4.png
-    - assets/5.png
-    - assets/6.png
-    - assets/7.png
-    - assets/8.png
-    - assets/9.png
-    - assets/10.png
-    - assets/underline.png
-    - assets/long_underline.png
-    - assets/bus_icon_purple.png
+    - assets/
   fonts:
     - family: Roboto,
       fonts:

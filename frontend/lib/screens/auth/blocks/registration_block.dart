@@ -99,7 +99,6 @@ class _RegistrationBlockState extends State<RegistrationBlock> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        //container for the whole screen
         color: const Color(0xFF191919),
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -152,6 +151,7 @@ class _RegistrationBlockState extends State<RegistrationBlock> {
                 )),
             TextField(
                 controller: _phoneController,
+                obscureText: true,
                 decoration: const InputDecoration(labelText: 'Phone Number')),
             Padding(
                 padding: const EdgeInsets.only(top: 30.0),
@@ -167,9 +167,11 @@ class _RegistrationBlockState extends State<RegistrationBlock> {
                 )),
             TextField(
                 controller: _passwordController,
+                obscureText: true,
                 decoration: const InputDecoration(labelText: 'Password')),
             TextField(
                 controller: _confirmPasswordController,
+                obscureText: true,
                 decoration:
                     const InputDecoration(labelText: 'Confirm Password')),
             const SizedBox(height: 10),

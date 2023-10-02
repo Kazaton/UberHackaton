@@ -6,16 +6,19 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Material(
-              child: LoginBlock(),
-            ),
-          ],
-        ) 
+    return SafeArea(
+      child: Container(
+        color: const Color(0xFF191919),
+        child: const SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Material(
+                child: LoginBlock(),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

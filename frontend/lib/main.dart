@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/components/side_menu.dart';
 import 'package:frontend/screens/auth/auth_screen.dart';
 import 'package:frontend/screens/homepage.dart';
 import 'package:frontend/context/token_service.dart';
@@ -49,10 +48,10 @@ class MyApp extends StatelessWidget {
             return const CircularProgressIndicator();
           } else {
             if (snapshot.hasData && snapshot.data == true) {
-              return const RegistrationScreen();
+              return const HomePage();
             } else {
               return Builder(
-                builder: (context) => SideMenu(),
+                builder: (context) => const RegistrationScreen(),
               );
             }
           }

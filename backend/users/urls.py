@@ -10,6 +10,7 @@ from .views import (
     BusRegistration,
     BusExit,
     GetUsersBus,
+    SeatReasonListView,
 )
 
 # URLs for the backend API
@@ -24,4 +25,5 @@ urlpatterns = [
     path("bus/register/<int:bus_id>/", BusRegistration.as_view(), name="bus-register"),
     path("bus/exit/<int:bus_id>/", BusExit.as_view(), name="bus-exit"),
     path("user/get/bus/", GetUsersBus.as_view(), name="get-users-bus"),
+    path("seat-reasons/", SeatReasonListView.as_view(), name="seat-reason-list"),
 ]
